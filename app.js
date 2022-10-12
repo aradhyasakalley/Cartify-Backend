@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan=require('morgan');
 const app = express();
-const dbURL= 'mongodb+srv://smitdama09:Ralip@029@ecommerce.gykzgiy.mongodb.net/?retryWrites=true&w=majority';
+const dbURL= 'mongodb+srv://smitdama09:Ralip%40029@ecommerce.gykzgiy.mongodb.net/Ecommerce?retryWrites=true&w=majority';
 mongoose.connect(dbURL , {useNewUrlParser : true , useUnifiedTopology:true})
     .then(()=>app.listen(3000, async()=>{
         try {
