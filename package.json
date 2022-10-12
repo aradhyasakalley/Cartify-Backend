@@ -1,0 +1,24 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "Building an Ecommerce backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Smit-Dama/nodeLearnings1.git"
+  },
+  "author": "Smit Dama",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Smit-Dama/nodeLearnings1/issues"
+  },
+  "homepage": "https://github.com/Smit-Dama/nodeLearnings1#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.6.5",
+    "morgan": "^1.10.0"
+  }
+}
