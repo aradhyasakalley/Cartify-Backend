@@ -1,6 +1,4 @@
 const mongoose=require('mongoose');
-const { stringify } = require('querystring');
-const { boolean } = require('webidl-conversions');
 const Schema = mongoose.Schema;
 const sellerSchema = new Schema({
     sellerID:{

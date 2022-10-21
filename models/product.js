@@ -1,19 +1,16 @@
 const mongoose=require('mongoose');
-const { stringify } = require('querystring');
-const { boolean } = require('webidl-conversions');
+//const { stringify } = require('querystring');
+//const { boolean } = require('webidl-conversions');
 const Schema = mongoose.Schema;
 const productSchema = new Schema({
-    prodID:{
-        type:Number,
-        required:true
-    },
+    
     productName:{
-        type:string,
+        type:String,
         required:true
     },
     Description:{
-        colour:{type:string,required:true},
-        brand:{type:string,required:true},
+        colour:{type:String,required:true},
+        brand:{type:String,required:true},
         warranty:{type:Boolean,required:true,default:false}
   
     },
@@ -29,5 +26,5 @@ const productSchema = new Schema({
 
 },{timestamps:true}
 );
-const product=mongoose.Model('product' ,productSchema);
+const product=mongoose.model('product' ,productSchema);
 module.exports= product;
