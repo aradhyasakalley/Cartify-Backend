@@ -3,24 +3,38 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username:{
         type:String,
-        //required:true
+        required:true
     },
     email:{
         type:String,
-        //required:true
+        required:true,
+        lowercase:true,
+        unique:[true,'This email-id is already taken'],
+
     },
     address:{
         type:String,
-       // required:true
+        required:true
     },
     new_user:{
         type:Boolean,
-        //default:false
+        default:false
     },
     Number:{
         type:Number,
-       // required:true
+        required:true,
+        length:[10,'PLZ ENTER 10 DIGITS'],
+        unique:[true,'This number is already registered'],
     },
+    role:{
+        type:String,
+        required:true,
+        enum:['buyer','seller']
+    },
+    rating:{
+        type:Number,
+        maxlength:[10 ,'Plz rate out of 10']
+    }
 
 
 },{timestamps:true}

@@ -16,9 +16,11 @@ res.json(res.reqProduct);
 })
 //create one
 router.post('/' , async(req,res)=>{
-//    const {createproduct}= Object.keys(Product)
-//    createproduct=req.body;
-const {productName , Description, isAvailable,Quantity}= req.body;
+   //const createproduct=    Object.keys(Product.schema.paths);
+   //console.log(createproduct)
+   //createproduct=req.body;
+   //const newProduct = new Product(createproduct);
+   const {productName , Description, isAvailable,Quantity}= req.body;
    const newProduct = new Product({productName , Description, isAvailable,Quantity});
    try {
     const savedProduct = await newProduct.save();
@@ -39,6 +41,19 @@ router.delete('/:id', getproduct, async (req, res) => {
   })
   
 //update one
+router.patch('/:id', getproduct, async (req, res) => {
+  
+    res.reqProduct.name = req.body.name;
+    res.reqProduct.Description = req.body.Description;
+    res.reqProduct.isAvailable = req.body.isAvailable;
+    res.reqProduct.Quantity=req.body.isAvailable;
+    try {
+    const updatedproduct = await res.reqProduct.save();
+    res.json(updatedSubscriber);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
 //middleware function to get product object from id
 async function getproduct(req, res, next) {
     let reqProduct

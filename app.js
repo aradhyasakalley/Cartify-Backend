@@ -4,7 +4,7 @@ const morgan=require('morgan');
 const app = express();
 const dotenv=require('dotenv').config();
 //const {dB_serverconnect}= require('./dBconnect');
-//const userRoute = require('./routes/userRoute');
+const userRoute = require('./routes/userRoute');
 const productRoute  = require('./routes/productRoute');
 //const user = require('./models/user');
 app.use(express.json());
@@ -20,7 +20,10 @@ mongoose.connect(process.env.dBURL , {useNewUrlParser : true , useUnifiedTopolog
     })
     )
     .catch((err)=>console.log(err));
+//product router
 app.use('/api/product' , productRoute);
+//user route
+app.use('/api/user' ,userRoute);
 //404 page
 app.use((req,res)=>{
     res.status(404).send("<p><h4>Oops!404 Error </h4></p>");
