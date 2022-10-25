@@ -40,13 +40,17 @@ const add_product=async(req,res)=>{
 
   const modify_product=async (req, res) => {
   
-    res.reqProduct.name = req.body.name;
-    res.reqProduct.Description = req.body.Description;
-    res.reqProduct.isAvailable = req.body.isAvailable;
-    res.reqProduct.Quantity=req.body.isAvailable;
+    if(req.body.name!=null)
+    {res.reqProduct.name = req.body.name}
+    if(req.body.Description!=null)
+    {res.reqProduct.Description = req.body.Description}
+    if(req.body.isAvailable!=null)
+    {res.reqProduct.isAvailable = req.body.isAvailable}
+    if(req.body.Quantity!=null)
+    {res.reqProduct.Quantity=req.body.isAvailable}
     try {
     const updatedproduct = await res.reqProduct.save();
-    res.json(updatedSubscriber);
+    res.json(updatedproduct);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -66,6 +70,6 @@ const add_product=async(req,res)=>{
   
     res.reqProduct = reqProduct;
     next()
-  }
+  };
 
   module.exports={show_product,product_byID,add_product,remove_product,modify_product,getproduct};

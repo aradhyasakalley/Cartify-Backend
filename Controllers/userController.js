@@ -32,13 +32,21 @@ const User = require('../models/user');
  }
  const modify_User=async(req,res)=>{
 
+    if (req.body.username!=null)
     res.reqUser.username = req.body.username;
+    if (req.body.email!=null)
     res.reqUser.email = req.body.email;
-    res.reqUser.address = req.body.address;
-    res.reqUser.new_user=req.body.new_user;
-    res.reqUser.Number = req.body.Number;
-    res.reqUser.role = req.body.role;
-    res.reqUser.rating = req.body.rating;
+    
+    if (req.body.address!=null)
+    {res.reqUser.address = req.body.address;}
+    if (req.body.new_user!=null)
+    {res.reqUser.new_user=req.body.new_user;}
+    if (req.body.Number!=null)
+    {res.reqUser.Number = req.body.Number;}
+    if (req.body.role!=null)
+    {res.reqUser.role = req.body.role;}
+    if (req.body.rating!=null)
+    {res.reqUser.rating = req.body.rating;}
     try {
     const updatedUser = await res.reqUser.save();
     res.json(updatedUser);
