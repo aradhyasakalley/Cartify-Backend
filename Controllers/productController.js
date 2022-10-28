@@ -10,7 +10,7 @@ const show_product=async(req,res)=>{
 }
 
 const product_byID= async(req,res)=>{
-    res.json(res.reqProduct);
+    res.status(201).json(res.reqProduct);
     }
 
 const add_product=async(req,res)=>{
@@ -32,7 +32,7 @@ const add_product=async(req,res)=>{
  const remove_product=async (req, res) => {
     try {
       await res.reqProduct.remove();
-      res.json({ message: 'Deleted product' });
+      res.status(200).json({ message: 'Deleted product' });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -50,7 +50,7 @@ const add_product=async(req,res)=>{
     {res.reqProduct.Quantity=req.body.isAvailable}
     try {
     const updatedproduct = await res.reqProduct.save();
-    res.json(updatedproduct);
+    res.status(200).json(updatedproduct);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

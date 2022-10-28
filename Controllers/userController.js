@@ -24,7 +24,7 @@ const User = require('../models/user');
  const remove_User=async(req,res)=>{
     try {
         await res.reqUser.remove();
-        res.json({ message: 'Deleted User' });
+        res.status(200).json({ message: 'Deleted User' });
       } catch (err) {
         res.status(500).json({ message: err.message });
       }
@@ -49,7 +49,7 @@ const User = require('../models/user');
     {res.reqUser.rating = req.body.rating;}
     try {
     const updatedUser = await res.reqUser.save();
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

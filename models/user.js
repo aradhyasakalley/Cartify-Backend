@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+const validator = require('validator');
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username:{
@@ -9,8 +10,14 @@ const userSchema = new Schema({
         type:String,
         required:true,
         lowercase:true,
+        trim:true,
         unique:[true,'This email-id is already taken'],
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error('You have entered invalid e-mail');
+            }
 
+        }
     },
     address:{
         type:String,
