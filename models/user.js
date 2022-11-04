@@ -20,6 +20,12 @@ const userSchema = new Schema({
 
         }
     },
+    password:{
+        type:String,
+        unique:true,
+        required:true
+
+    },
     address:{
         type:String,
         required:true
@@ -58,6 +64,6 @@ userSchema.pre('save' , async function(next){
     this.password=  await bcrypt.hash(this.password , salt)
     next();
 
-})
+});
 const user=mongoose.model('User' ,userSchema);
 module.exports= user

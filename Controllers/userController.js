@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const bcrypt= require('bcrypt');
+const jwt = require('jsonwebtoken');
  const getAllusers=async(req,res)=>{
     try {
         const user= await User.find();
@@ -11,15 +13,35 @@ const User = require('../models/user');
 
  const add_User=async(req,res)=>{
     const {username , email, address,new_user,Number,role,rating}= req.body;
-   const newUser = new User({username , email, address,new_user,Number,role,rating});
-   try {
+    const newUser = new User(req.body);
+    try {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
-   } catch (error) {
+    } catch (error) {
     res.status(400).json({message:error.message});
-   }
+    }
 
- }
+  }
+
+const login_user= async(req,res)=>{
+  const {email,password} = req.body;
+  const user = await User.find({email});
+  if(user)
+  {
+      const passwordmatch = await bcrypt.compare(password ,user.password);
+      if(passwordmatch)
+      { 
+        const maxAge = 3 * 24 * 60 * 60;
+        const token = jwt.sign({id} ,process.env.Token_Secret , {
+        expiresIn:maxAge
+        })
+        return res.status(200).send(token);
+      }
+      throw Error('Incorrect Password');
+
+  }
+  throw Error('Incorrect email');
+}
 
  const remove_User=async(req,res)=>{
     try {
@@ -71,5 +93,5 @@ const User = require('../models/user');
     next()
   }
  module.exports={
-    getAllusers,add_User,modify_User,remove_User,findUser
+    getAllusers,add_User,modify_User,remove_User,findUser,login_user
  };
