@@ -25,22 +25,34 @@ const jwt = require('jsonwebtoken');
 
 const login_user= async(req,res)=>{
   const {email,password} = req.body;
-  const user = await User.find({email});
+  const user = await User.findOne({email});
+  try{
   if(user)
   {
+
+      console.log(user);
+      console.log(password , user.password );
       const passwordmatch = await bcrypt.compare(password ,user.password);
       if(passwordmatch)
       { 
         const maxAge = 3 * 24 * 60 * 60;
-        const token = jwt.sign({id} ,process.env.Token_Secret , {
+        const token = jwt.sign({id:user.id} ,process.env.Token_Secret , {
         expiresIn:maxAge
         })
-        return res.status(200).send(token);
+        return res.header('Authorization' ,token).status(200).send({
+          user:user,
+          message:"login successful",
+          token:token
+
+        });
       }
       throw Error('Incorrect Password');
 
   }
-  throw Error('Incorrect email');
+  throw Error('Incorrect email');}
+  catch (error){
+    res.status(400).json({message:error.message});
+  }
 }
 
  const remove_User=async(req,res)=>{

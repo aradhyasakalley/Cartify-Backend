@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const userController = require('../Controllers/userController');
+const auth = require('../Controllers/authcontroller');
 
 
 
 //get all
-router.get('/' , userController.getAllusers );
+router.get('/' , auth.verifytoken , userController.getAllusers);
 
 //sign up new user 
 router.post('/signup' , userController.add_User);
