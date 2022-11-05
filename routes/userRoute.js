@@ -14,8 +14,8 @@ router.post('/signup' , userController.add_User);
 router.post('/login' ,userController.login_user)
 
 //delete one
-router.delete('/:id', userController.findUser, userController.remove_User);
+router.delete('/:id', auth.verifytoken, userController.findUser, userController.remove_User);
 //update one
-router.patch('/:id', userController.findUser, userController.modify_User);
+router.patch('/:id', auth.verifytoken, userController.findUser, userController.modify_User);
 
 module.exports = router;

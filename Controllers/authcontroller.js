@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv=require('dotenv').config();
 const verifytoken = async(req,res,next)=>{
     try{
-    const bearerHeader = req.headers['Authorization'];
+    const bearerHeader = req.headers['authorization'];
     console.log(bearerHeader);
     if(bearerHeader)
     {
