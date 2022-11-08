@@ -11,9 +11,10 @@ mongoose.connect(process.env.dBURL , {useNewUrlParser : true , useUnifiedTopolog
     try {
         console.log('Connected to Database');
         console.log('Connected to Port 3000');
-    } catch (error) {
+        } 
+    catch (error) {
         console.log('Error Occured' ,error);
-    }
+        }
 })
 )
 .catch((err)=>console.log(err));

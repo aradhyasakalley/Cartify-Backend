@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const userController = require('../Controllers/userController');
-const auth = require('../Controllers/authcontroller');
-
+const auth = require('../MIddleware/authcontroller');
+const {authRole} = require('../MIddleware/authRole');
 
 
 //get all
-router.get('/' , auth.verifytoken , userController.getAllusers);
+router.get('/' , auth.verifytoken ,  userController.getAllusers);
 
 //sign up new user 
 router.post('/signup' , userController.add_User);
@@ -14,7 +14,7 @@ router.post('/signup' , userController.add_User);
 router.post('/login' ,userController.login_user)
 
 //delete one
-router.delete('/:id', auth.verifytoken, userController.findUser, userController.remove_User);
+router.delete('/:id', auth.verifytoken, authRole('admin'), userController.findUser, userController.remove_User);
 //update one
 router.patch('/:id', auth.verifytoken, userController.findUser, userController.modify_User);
 

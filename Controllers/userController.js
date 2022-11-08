@@ -5,9 +5,10 @@ const jwt = require('jsonwebtoken');
     try {
         const user= await User.find();
         res.status(200).json(user);
-    } catch (error) {
+        } 
+        catch (error) {
         res.status(400).json({message:error.message});
-    }
+        }
 
  }
 
@@ -17,7 +18,8 @@ const jwt = require('jsonwebtoken');
     try {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
-    } catch (error) {
+    } 
+    catch (error) {
     res.status(400).json({message:error.message});
     }
 
@@ -36,7 +38,7 @@ const login_user= async(req,res)=>{
       if(passwordmatch)
       { 
         const maxAge = 3 * 24 * 60 * 60;
-        const token = jwt.sign({id:user.id} ,process.env.Token_Secret , {
+        const token = jwt.sign({id:user.id ,role:user.role} ,process.env.Token_Secret , {
         expiresIn:maxAge
         })
         return res.header('Authorization' ,token).status(200).send({
@@ -46,10 +48,10 @@ const login_user= async(req,res)=>{
 
         });
       }
-      throw Error('Incorrect Password');
+      
 
   }
-  throw Error('Incorrect email');}
+  throw Error('Incorrect email or Password');}
   catch (error){
     res.status(400).json({message:error.message});
   }
@@ -84,10 +86,11 @@ const login_user= async(req,res)=>{
     try {
     const updatedUser = await res.reqUser.save();
     res.status(200).json(updatedUser);
-  } catch (err) {
+    } 
+    catch (err) {
     res.status(400).json({ message: err.message });
+    }
   }
- }
 
  //middleware to obtain user
   const findUser=async(req, res, next)=> {
