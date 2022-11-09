@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const productController = require('../Controllers/productController');
-const auth=require('../MIddleware/authcontroller');
+const auth=require('../MIddleware/auth');
 const {authRole} = require('../MIddleware/authRole');
 //app.use(express.json());
 //app.use(express.urlencoded({ extended: true })) ;
