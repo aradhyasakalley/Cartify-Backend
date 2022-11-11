@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { token } = require('morgan');
  const getAllusers=async(req,res)=>{
     try {
         const user= await User.find();
@@ -32,15 +33,17 @@ const login_user= async(req,res)=>{
   if(user)
   {
 
-      console.log(user);
-      console.log(password , user.password );
+      //console.log(user);
+      //console.log(password , user.password );
       const passwordmatch = await bcrypt.compare(password ,user.password);
       if(passwordmatch)
       { 
         const maxAge = 3 * 24 * 60 * 60;
-        const token = jwt.sign({id:user.id ,role:user.role} ,process.env.Token_Secret , {
+        const token = jwt.sign({email:user.email,role:user.role} ,process.env.Token_Secret , {
         expiresIn:maxAge
         })
+        user.tokens=user.tokens.concat({token});
+        await user.save();
         return res.header('Authorization' ,token).status(200).send({
           user:user,
           message:"login successful",
@@ -54,6 +57,30 @@ const login_user= async(req,res)=>{
   throw Error('Incorrect email or Password');}
   catch (error){
     res.status(400).json({message:error.message});
+  }
+}
+
+const logout_user=async(req,res)=>{
+  try {
+    const user=req.user;
+    user.tokens=user.tokens.filter((token)=>{
+      return token.token!==req.token;
+    })
+    await user.save();
+    res.status(200).json({message:'Logged out'});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+const logout_user_all=async(req,res)=>{
+  try {
+    const user=req.user;
+    user.tokens=[];
+    await user.save();
+    res.status(200).json({message:'Logged out Throughout'});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }
 
@@ -108,5 +135,5 @@ const login_user= async(req,res)=>{
     next()
   }
  module.exports={
-    getAllusers,add_User,modify_User,remove_User,findUser,login_user
+    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all
  };

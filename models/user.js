@@ -48,7 +48,13 @@ const userSchema = new Schema({
     rating:{
         type:Number,
         maxlength:[10 ,'Plz rate out of 10']
-    }
+    },
+    tokens:[{
+        token:{
+            type:String,
+            required:true
+        }
+    }]
 
 
 },{timestamps:true}
@@ -60,8 +66,11 @@ userSchema.post('save' ,function(doc,next){
 });
 
 userSchema.pre('save' , async function(next){
+    if(this.isModified('password'))
+    {
     const salt= await bcrypt.genSalt(5);
     this.password=  await bcrypt.hash(this.password , salt)
+    }
     next();
 
 });

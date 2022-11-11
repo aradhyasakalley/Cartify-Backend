@@ -13,6 +13,12 @@ router.post('/signup' , userController.add_User);
 //login user
 router.post('/login' ,userController.login_user)
 
+//logout user
+router.post('/logout',auth.verifytoken,userController.logout_user)
+
+//logout user
+router.post('/logoutAll',auth.verifytoken,userController.logout_user_all)
+
 //delete one
 router.delete('/:id', auth.verifytoken, authRole('admin'), userController.findUser, userController.remove_User);
 //update one
