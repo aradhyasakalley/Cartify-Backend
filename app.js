@@ -28,6 +28,7 @@ app.use('/api/user' ,userRoute);
 app.use(fileUpload({
     useTempFiles:true
 }))
+app.use(express.static('upload'))
 //404 page
 app.use((req,res)=>{
     res.status(404).send("<p><h4>Oops!404 Error </h4></p>");

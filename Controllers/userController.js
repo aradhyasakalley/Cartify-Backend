@@ -141,8 +141,11 @@ const logout_user_all=async(req,res)=>{
     try {
       const result=await cloudinary.uploader.upload(req.file.path)
         let user=req.user
-        await User.updateOne({_id:user._id},{$set:{profilePic:result.url,cloudinaryId:result.public_id}})
-        res.status(201).json({message:'Profile pic uploaded'})
+        //await User.updateOne({_id:user._id},{$set:{profilePic:result.url,cloudinaryId:result.public_id}})
+        user.profilePic=result.url
+        user.cloudinaryId=result.public_id
+        await user.save()
+        res.status(201).json({message:'Profile pic uploaded',user})
       }
      catch (error) {
       return res.status(500).json({ message: error.message });

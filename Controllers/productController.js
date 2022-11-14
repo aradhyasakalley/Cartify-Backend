@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const upload=require('../utils/multerBuffer')
 const show_product=async(req,res)=>{
     try {
         const product= await Product.find();
@@ -17,7 +18,7 @@ const add_product=async(req,res)=>{
     //console.log(createproduct)
     //createproduct=req.body;
     //const newProduct = new Product(createproduct);
-    //const {productName , Description, isAvailable,Quantity}= req.body;
+    const {productName , Description, isAvailable,Quantity}= req.body;
     //const newProduct = new Product({productName , Description, isAvailable,Quantity});
     const newProduct = new Product(req.body);
     try {
@@ -30,7 +31,11 @@ const add_product=async(req,res)=>{
 
  const product_Image=async(req,res)=>{
   try {
-    res.status(201).json({message:'File Uploaded'})
+    let prod=await Product.findById(req.params.id);
+    console.log(req.file)
+    prod.Image=req.file
+    prod=await prod.save()
+    res.status(201).json({message:'File Uploaded',prod})
   } catch (error) {
     res.status(400).json({message:error.message});
   }

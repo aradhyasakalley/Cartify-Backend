@@ -20,7 +20,7 @@ router.post('/logout',auth.verifytoken,userController.logout_user)
 //logout user
 router.post('/logoutAll',auth.verifytoken,userController.logout_user_all)
 
-router.put('/uploadProfilePic',auth.verifytoken,upload.single('profilePic'),userController.upload_profilePic)
+router.post('/uploadProfilePic',auth.verifytoken,upload.single('profilePic'),userController.upload_profilePic)
 router.put('/removeProfilePic/:id',auth.verifytoken,userController.remove_profilePic);
 //delete one
 router.delete('/:id', auth.verifytoken, authRole('admin'), userController.findUser, userController.remove_User);
