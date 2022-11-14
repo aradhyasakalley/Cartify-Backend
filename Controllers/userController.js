@@ -2,6 +2,8 @@ const User = require('../models/user');
 const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { token } = require('morgan');
+const upload=require('../utils/multer');
+const cloudinary=require('../utils/cloudinary')
  const getAllusers=async(req,res)=>{
     try {
         const user= await User.find();
@@ -134,6 +136,28 @@ const logout_user_all=async(req,res)=>{
     res.reqUser = reqUser;
     next()
   }
+
+  const upload_profilePic=async(req,res,next)=>{
+    try {
+      const result=await cloudinary.uploader.upload(req.file.path)
+        let user=req.user
+        await User.updateOne({_id:user._id},{$set:{profilePic:result.url,cloudinaryId:result.public_id}})
+        res.status(201).json({message:'Profile pic uploaded'})
+      }
+     catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  const remove_profilePic=async(req,res)=>{
+    try {
+      const user=await User.findById(req.params.id);
+      await cloudinary.uploader.destroy(user.cloudinaryId);
+      await User.updateOne({_id:user._id},{$set:{profilePic:null,cloudinaryId:null}})
+      res.status(200).json({message:'Profile pic removed'})
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
  module.exports={
-    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all
+    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all,upload_profilePic,remove_profilePic
  };

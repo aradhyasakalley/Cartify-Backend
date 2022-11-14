@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const validator = require('validator');
 const bcrypt= require('bcrypt');
+const product = require('./product');
 const Schema = mongoose.Schema;
 const userSchema = new Schema({
     username:{
@@ -49,11 +50,27 @@ const userSchema = new Schema({
         type:Number,
         maxlength:[10 ,'Plz rate out of 10']
     },
+    profilePic:{
+        type:String
+    },
+    cloudinaryId:{
+        type:String
+    },
     tokens:[{
         token:{
             type:String,
             required:true
         }
+    }],
+    cart:[{
+        product:[{
+            prod:{
+            type:String
+            },
+        Quantity:{
+            type:Number
+            }
+        }]
     }]
 
 

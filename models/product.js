@@ -22,8 +22,9 @@ const productSchema = new Schema({
         type:Number,
         required:true
     },
-
-
+    Image:{
+        type:Buffer
+    }
 },{timestamps:true}
 );
 const product=mongoose.model('product' ,productSchema);

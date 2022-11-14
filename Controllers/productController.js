@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-
 const show_product=async(req,res)=>{
     try {
         const product= await Product.find();
@@ -18,15 +17,23 @@ const add_product=async(req,res)=>{
     //console.log(createproduct)
     //createproduct=req.body;
     //const newProduct = new Product(createproduct);
-    const {productName , Description, isAvailable,Quantity}= req.body;
-    const newProduct = new Product({productName , Description, isAvailable,Quantity});
+    //const {productName , Description, isAvailable,Quantity}= req.body;
+    //const newProduct = new Product({productName , Description, isAvailable,Quantity});
+    const newProduct = new Product(req.body);
     try {
      const savedProduct = await newProduct.save();
      res.status(201).json(savedProduct);
     } catch (error) {
      res.status(400).json({message:error.message});
     }
- 
+ }
+
+ const product_Image=async(req,res)=>{
+  try {
+    res.status(201).json({message:'File Uploaded'})
+  } catch (error) {
+    res.status(400).json({message:error.message});
+  }
  }
 
  const remove_product=async (req, res) => {
@@ -72,4 +79,4 @@ const add_product=async(req,res)=>{
     next()
   };
 
-  module.exports={show_product,product_byID,add_product,remove_product,modify_product,getproduct};
+  module.exports={show_product,product_byID,add_product,remove_product,modify_product,getproduct,product_Image};
