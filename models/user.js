@@ -63,14 +63,27 @@ const userSchema = new Schema({
         }
     }],
     cart:[{
-        product:[{
-            prod:{
-            type:String
+        product:{
+            productName:{
+                type:String,
             },
-        Quantity:{
-            type:Number
+            prodId:{type:String},
+            Description:{
+                colour:{type:String},
+                brand:{type:String},
+                warranty:{type:Boolean}
+          
+            },
+            prize:{
+                type:Number,
+            },
+            isAvailable:{
+                type:Boolean,
+            },
+            Quantity:{
+                type:Number
             }
-        }]
+        },
     }]
 
 

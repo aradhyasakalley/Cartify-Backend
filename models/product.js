@@ -14,6 +14,10 @@ const productSchema = new Schema({
         warranty:{type:Boolean,required:true,default:false}
   
     },
+    prize:{
+        type:Number,
+        required:true
+    },
     isAvailable:{
         type:Boolean,
         required:true

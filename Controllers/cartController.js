@@ -6,11 +6,28 @@ const addProdtoCart=async(req,res)=>{
     const user=req.user;
     const prod=await Product.findById(req.body.prodId)
     if(!prod)
-    res.status(404).json({message:'Product not found'})
+    return res.status(404).json({message:'Product not found'})
     try {
-        user.cart.prod=user.cart.concat(prod);
-        await user.save();
-        res.status(201).json({message:'added to cart',prod,user})
+        //user.cart.product=(prod.Description+prod.productName+req.body.Quantity)
+        await User.findByIdAndUpdate(user._id,{
+            $addToSet:{
+                cart:{
+                    product:{
+                        productName:prod.productName,
+                        prodId:prod._id,
+                        Description:{
+                            colour:prod.Description.colour,
+                            brand:prod.Description.brand,
+                            warranty:prod.Description.warranty},
+                        prize:prod.prize,
+                        isAvailable:prod.isAvailable,
+                    Quantity:req.body.Quantity
+                        }
+                }
+            }
+        })
+       await user.save()
+        res.status(201).json({message:'added to cart'})
     } catch (error) {
         res.status(400).json({message:error.message});
     }
@@ -20,7 +37,9 @@ const removeProd=async(req,res)=>{
     try {
         const user=req.user;
         const {prodId}=req.body
-        
+        user.cart=user.cart.filter((product)=>{
+            return product.product.prodId!==req.body.prodId;})
+            res.status(202).json({message:'removed from cart',user})
 }catch(error)
 {
     res.status(400).json({message:error.message})
