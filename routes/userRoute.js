@@ -30,5 +30,5 @@ router.patch('/:id', auth.verifytoken, userController.findUser, userController.m
 router.post('/addToCart',auth.verifytoken,cartController.addProdtoCart)
 
 router.post('/removeProd',auth.verifytoken,cartController.removeProd)
-
+router.get('/getMyprod',auth.verifytoken,authRole('seller'),userController.getMyprod)
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Product=require('../models/product')
 const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { token } = require('morgan');
@@ -161,6 +162,16 @@ const logout_user_all=async(req,res)=>{
       return res.status(500).json({ message: error.message });
     }
   }
+
+  const getMyprod=async(req,res)=>{
+    try {
+      console.log(req.user.prodId)
+      const prod=await Product.find({_id:(req.user.prodId)})
+      res.status(200).json(prod)
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
  module.exports={
-    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all,upload_profilePic,remove_profilePic
+    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all,upload_profilePic,remove_profilePic,getMyprod
  };

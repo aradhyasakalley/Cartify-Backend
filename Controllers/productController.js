@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const user = require('../models/user');
 const upload=require('../utils/multerBuffer')
 const show_product=async(req,res)=>{
     try {
@@ -23,6 +24,13 @@ const add_product=async(req,res)=>{
     const newProduct = new Product(req.body);
     try {
      const savedProduct = await newProduct.save();
+     let productId=savedProduct._id
+     await user.findByIdAndUpdate(req.user._id,{
+      $addToSet:{
+        prodId:productId
+      }
+     })
+     req.user.save()
      res.status(201).json(savedProduct);
     } catch (error) {
      res.status(400).json({message:error.message});

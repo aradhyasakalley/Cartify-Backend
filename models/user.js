@@ -46,6 +46,7 @@ const userSchema = new Schema({
         required:true,
         enum:['buyer','seller','admin']
     },
+    prodId:[String],
     rating:{
         type:Number,
         maxlength:[10 ,'Plz rate out of 10']
