@@ -2,6 +2,7 @@ const router = require('express').Router();
 const userController = require('../Controllers/userController');
 const auth = require('../MIddleware/auth');
 const cartController=require('../Controllers/cartController');
+const orderController=require('../Controllers/orderController')
 const {authRole} = require('../MIddleware/authRole');
 const upload=require('../utils/multer')
 
@@ -31,4 +32,7 @@ router.post('/addToCart',auth.verifytoken,cartController.addProdtoCart)
 
 router.post('/removeProd',auth.verifytoken,cartController.removeProd)
 router.get('/getMyprod',auth.verifytoken,authRole('seller'),userController.getMyprod)
+
+router.post('/directOrder',auth.verifytoken,orderController.directOrder)
+router.post('/cartOrder',auth.verifytoken,orderController.cartOrder)
 module.exports = router;

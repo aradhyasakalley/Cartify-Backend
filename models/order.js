@@ -16,12 +16,25 @@ const orderSchema=new Schema({
     Number:{
         type:String
     },
-    cart:[{
-        product:{
-            
-        }
-    }],
     totalPrize:{
         type:Number
-    }
+    },
+    cart:[{
+        product:{productName:{
+            type:String,
+        },
+        prodId:{type:String},
+        prize:{
+            type:Number,
+        },
+        Quantity:{
+            type:Number
+        }
+    },
+
+        
+    }]
 })
+
+const Order=mongoose.model('Order',orderSchema)
+module.exports=Order

@@ -7,6 +7,10 @@ const addProdtoCart=async(req,res)=>{
     const prod=await Product.findById(req.body.prodId)
     if(!prod)
     return res.status(404).json({message:'Product not found'})
+    
+    if(req.body.quantity>prod.Quantity)
+        return res.status(200).json({message:'Product sold out!!!'})
+
     try {
         //user.cart.product=(prod.Description+prod.productName+req.body.Quantity)
         await User.findByIdAndUpdate(user._id,{

@@ -73,7 +73,6 @@ const userSchema = new Schema({
                 colour:{type:String},
                 brand:{type:String},
                 warranty:{type:Boolean}
-          
             },
             prize:{
                 type:Number,
