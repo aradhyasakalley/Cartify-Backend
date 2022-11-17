@@ -10,8 +10,7 @@ const directOrder=async(req,res)=>{
         if(req.body.Quantity>prod.Quantity)
         return res.status(200).json({message:'Product sold out!!!'})
 
-       const price=prod.prize*req.body.quantity
-       console.log(price)
+       const price=prod.prize*(Number(req.body.Quantity))
         const order=new Order({
             userId:userData._id,
             username:userData.username,
@@ -41,7 +40,7 @@ const cartOrder=async(req,res)=>{
         const userData=req.user
         const prod=await Product.findById(userData.cart.product.prodId)
         let price
-        price+=(userData.cart.prize)*userData.cart.Quantity
+        price+=Number(userData.cart.prize)*(Number(userData.cart.Quantity))
         prod.Quantity-=userData.cart.Quantity
         prod.save()
         res.status(200).json({userData,prod,price})
