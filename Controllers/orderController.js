@@ -61,11 +61,13 @@ const cartOrder=async(req,res)=>{
         const userData=req.user
         const cart=(userData.cart)
         //console.log(cart)
-        const prod=await Product.findOne({prodId:cart.prodId})
+        console.log(userData.cart.prodId)
+        const prod=await Product.findById(userData.cart.prodId)
         console.log(prod)
         let price=0
-        console.log(prod.prize,Number(cart.Quantity))
-        price+=Number(prod.prize)*(Number(cart.Quantity))
+        //console.log(prod.prize,Number(cart.Quantity))
+        price+=Number(cart.prize)*(Number(cart.Quantity))
+        prod.Quantity-=cart.Quantity
         prod.save()
         let prodDetails={
             productName:prod.productName,

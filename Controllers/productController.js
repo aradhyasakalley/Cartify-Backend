@@ -92,4 +92,15 @@ const add_product=async(req,res)=>{
     next()
   };
 
-  module.exports={show_product,product_byID,add_product,remove_product,modify_product,getproduct,product_Image};
+  const compareProducts=async(req,res,next)=>{
+    try {
+      const {prodId1,prodId2}=req.body
+      const prod1=await Product.findById(req.body.prodId1)
+      const prod2=await Product.findById(req.body.prodId2)
+      res.status(200).json({prod1,prod2})
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  module.exports={show_product,product_byID,add_product,remove_product,modify_product,getproduct,product_Image,compareProducts};

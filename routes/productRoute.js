@@ -16,5 +16,5 @@ router.delete('/:id', auth.verifytoken, authRole('seller'), productController.ge
   
 //update one
 router.patch('/:id', auth.verifytoken, authRole('seller'), productController.getproduct, productController.modify_product);
-//router.post('/upload',upload,productController.product_Image)
+router.post('/compareProducts',productController.compareProducts)
 module.exports=router;
