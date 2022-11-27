@@ -40,8 +40,8 @@ const add_product=async(req,res)=>{
  const product_Image=async(req,res)=>{
   try {
     let prod=await Product.findById(req.params.id);
-    console.log(req.file)
-    prod.Image=req.file
+    console.log(req.files)
+    prod.Image.data=await (req.files)
     prod=await prod.save()
     res.status(201).json({message:'File Uploaded',prod})
   } catch (error) {

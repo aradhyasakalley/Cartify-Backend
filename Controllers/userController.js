@@ -5,6 +5,14 @@ const jwt = require('jsonwebtoken');
 const { token } = require('morgan');
 const upload=require('../utils/multer');
 const cloudinary=require('../utils/cloudinary')
+const nodemailer=require('nodemailer')
+let mailTransporter=nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user:"try.user99@gmail.com",
+    pass:"juubuhmyejlursur"
+  }
+})
  const getAllusers=async(req,res)=>{
     try {
         const user= await User.find();
@@ -21,6 +29,18 @@ const cloudinary=require('../utils/cloudinary')
     const newUser = new User(req.body);
     try {
     const savedUser = await newUser.save();
+    let details={
+      from:"try.user99@gmail.com",
+      to:newUser.email,
+      subject:"SIGNED UP!!! ElexCart",
+      text:"confirmation email that u have created account in ElexCart from Devansh:)"
+    }
+    mailTransporter.sendMail(details,(err)=>{
+      if(err)
+      console.log(err.message)
+      else
+      console.log('email sent')
+    })
     res.status(201).json(savedUser);
     } 
     catch (error) {
@@ -47,6 +67,18 @@ const login_user= async(req,res)=>{
         })
         user.tokens=user.tokens.concat({token});
         await user.save();
+        let details={
+          from:"try.user99@gmail.com",
+          to:user.email,
+          subject:"Logged In!!! ElexCart",
+          text:"confirmation email that u have logged in ElexCart from Devansh :)"
+        }
+        mailTransporter.sendMail(details,(err)=>{
+          if(err)
+          console.log(err.message)
+          else
+          console.log('email sent')
+        })
         return res.header('Authorization' ,token).status(200).send({
           user:user,
           message:"login successful",
