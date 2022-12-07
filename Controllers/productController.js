@@ -1,6 +1,8 @@
 const Product = require('../models/product');
 const user = require('../models/user');
 const upload=require('../utils/multerBuffer')
+const fs=require('fs')
+const path=require('path')
 const show_product=async(req,res)=>{
     try {
         const product= await Product.find();
@@ -41,8 +43,9 @@ const add_product=async(req,res)=>{
   try {
     let prod=await Product.findById(req.params.id);
     console.log(req.files)
-    prod.Image.data=await (req.files)
+    prod.Image=await (req.files)
     prod=await prod.save()
+    //fs.unlinkSync(req.files);
     res.status(201).json({message:'File Uploaded',prod})
   } catch (error) {
     res.status(400).json({message:error.message});
