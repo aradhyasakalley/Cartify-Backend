@@ -60,7 +60,7 @@ const cartOrder=async(req,res)=>{
     try {
         let prod,i=0,price=0
         const userData=req.user
-        const cart=(userData.cart)
+        var cart=(userData.cart)
         for (const product of cart) {
             let p=cart[i].product
             prod=await Product.findById(p.prodId)
@@ -78,6 +78,8 @@ const cartOrder=async(req,res)=>{
         console.log(prodDetails)
         i++
         }
+        req.user.cart=[]
+        await req.user.save()
         res.status(200).json({message:'order placed',price:price})
     } catch (error) {
         res.status(400).json({message:error.message})
