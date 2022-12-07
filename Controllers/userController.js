@@ -1,6 +1,18 @@
 const User = require('../models/user');
+const Product=require('../models/product')
 const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { token } = require('morgan');
+const upload=require('../utils/multer');
+const cloudinary=require('../utils/cloudinary')
+const nodemailer=require('nodemailer')
+let mailTransporter=nodemailer.createTransport({
+  service:"gmail",
+  auth:{
+    user:"try.user99@gmail.com",
+    pass:"juubuhmyejlursur"
+  }
+})
  const getAllusers=async(req,res)=>{
     try {
         const user= await User.find();
@@ -17,6 +29,18 @@ const jwt = require('jsonwebtoken');
     const newUser = new User(req.body);
     try {
     const savedUser = await newUser.save();
+    let details={
+      from:"try.user99@gmail.com",
+      to:newUser.email,
+      subject:"SIGNED UP!!! ElexCart",
+      text:"confirmation email that u have created account in ElexCart from Devansh:)"
+    }
+    mailTransporter.sendMail(details,(err)=>{
+      if(err)
+      console.log(err.message)
+      else
+      console.log('email sent')
+    })
     res.status(201).json(savedUser);
     } 
     catch (error) {
@@ -32,14 +56,28 @@ const login_user= async(req,res)=>{
   if(user)
   {
 
-      console.log(user);
-      console.log(password , user.password );
+      //console.log(user);
+      //console.log(password , user.password );
       const passwordmatch = await bcrypt.compare(password ,user.password);
       if(passwordmatch)
       { 
         const maxAge = 3 * 24 * 60 * 60;
-        const token = jwt.sign({id:user.id ,role:user.role} ,process.env.Token_Secret , {
+        const token = jwt.sign({email:user.email,role:user.role} ,process.env.Token_Secret , {
         expiresIn:maxAge
+        })
+        user.tokens=user.tokens.concat({token});
+        await user.save();
+        let details={
+          from:"try.user99@gmail.com",
+          to:user.email,
+          subject:"Logged In!!! ElexCart",
+          text:"confirmation email that u have logged in ElexCart from Devansh :)"
+        }
+        mailTransporter.sendMail(details,(err)=>{
+          if(err)
+          console.log(err.message)
+          else
+          console.log('email sent')
         })
         return res.header('Authorization' ,token).status(200).send({
           user:user,
@@ -54,6 +92,30 @@ const login_user= async(req,res)=>{
   throw Error('Incorrect email or Password');}
   catch (error){
     res.status(400).json({message:error.message});
+  }
+}
+
+const logout_user=async(req,res)=>{
+  try {
+    const user=req.user;
+    user.tokens=user.tokens.filter((token)=>{
+      return token.token!==req.token;
+    })
+    await user.save();
+    res.status(200).json({message:'Logged out'});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
+
+const logout_user_all=async(req,res)=>{
+  try {
+    const user=req.user;
+    user.tokens=[];
+    await user.save();
+    res.status(200).json({message:'Logged out Throughout'});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 }
 
@@ -107,6 +169,41 @@ const login_user= async(req,res)=>{
     res.reqUser = reqUser;
     next()
   }
+
+  const upload_profilePic=async(req,res,next)=>{
+    try {
+      const result=await cloudinary.uploader.upload(req.file.path)
+        let user=req.user
+        //await User.updateOne({_id:user._id},{$set:{profilePic:result.url,cloudinaryId:result.public_id}})
+        user.profilePic=result.url
+        user.cloudinaryId=result.public_id
+        await user.save()
+        res.status(201).json({message:'Profile pic uploaded',user})
+      }
+     catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+  const remove_profilePic=async(req,res)=>{
+    try {
+      const user=await User.findById(req.params.id);
+      await cloudinary.uploader.destroy(user.cloudinaryId);
+      await User.updateOne({_id:user._id},{$set:{profilePic:null,cloudinaryId:null}})
+      res.status(200).json({message:'Profile pic removed'})
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+
+  const getMyprod=async(req,res)=>{
+    try {
+      console.log(req.user.prodId)
+      const prod=await Product.find({_id:(req.user.prodId)})
+      res.status(200).json(prod)
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  }
  module.exports={
-    getAllusers,add_User,modify_User,remove_User,findUser,login_user
+    getAllusers,add_User,modify_User,remove_User,findUser,login_user,logout_user,logout_user_all,upload_profilePic,remove_profilePic,getMyprod
  };
