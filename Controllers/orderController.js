@@ -58,24 +58,27 @@ const directOrder=async(req,res)=>{
 
 const cartOrder=async(req,res)=>{
     try {
+        let prod,i=0,price=0
         const userData=req.user
         const cart=(userData.cart)
-        //console.log(cart)
-        console.log(cart)
-        const prod=await Product.findById(cart.product.prodId)
-        console.log(prod)
-        let price=0
-        //console.log(prod.prize,Number(cart.Quantity))
-        price+=Number(cart.prize)*(Number(cart.Quantity))
-        prod.Quantity-=cart.Quantity
-        prod.save()
-        let prodDetails={
+        for (const product of cart) {
+            let p=cart[i].product
+            prod=await Product.findById(p.prodId)
+            if(prod.Quantity<p.Quantity)
+            return res.status(400).json('product sold out')
+            prod.Quantity-=p.Quantity
+            prod.save()
+            price+=p.Quantity*prod.prize
+            let prodDetails={
             productName:prod.productName,
                         prodId:prod._id,
                         prize:prod.prize,
-                        Quantity:cart.Quantity
+                        Quantity:p.Quantity
         }
-        res.status(200).json({userData,prodDetails,price})
+        console.log(prodDetails)
+        i++
+        }
+        res.status(200).json({message:'order placed',price:price})
     } catch (error) {
         res.status(400).json({message:error.message})
     }
