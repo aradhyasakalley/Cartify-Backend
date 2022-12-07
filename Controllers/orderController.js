@@ -61,6 +61,8 @@ const cartOrder=async(req,res)=>{
         let prod,i=0,price=0
         const userData=req.user
         var cart=(userData.cart)
+        if(cart.length===0)
+        return res.status(200).json({message:'cart is empty'})
         for (const product of cart) {
             let p=cart[i].product
             prod=await Product.findById(p.prodId)
