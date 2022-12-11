@@ -14,6 +14,10 @@ const productSchema = new Schema({
         warranty:{type:Boolean,required:true,default:false}
   
     },
+    prize:{
+        type:Number,
+        required:true
+    },
     isAvailable:{
         type:Boolean,
         required:true
@@ -22,8 +26,9 @@ const productSchema = new Schema({
         type:Number,
         required:true
     },
-
-
+    Image:{
+        type:Buffer
+    }
 },{timestamps:true}
 );
 const product=mongoose.model('product' ,productSchema);
