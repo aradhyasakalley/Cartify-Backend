@@ -14,10 +14,7 @@ const product_byID= async(req,res)=>{
     }
 
 const add_product=async(req,res)=>{
-    //const createproduct=    Object.keys(Product.schema.paths);
-    //console.log(createproduct)
-    //createproduct=req.body;
-    //const newProduct = new Product(createproduct);
+    
     const {productName , Description, isAvailable,Quantity}= req.body;
     const newProduct = new Product({productName , Description, isAvailable,Quantity});
     try {
