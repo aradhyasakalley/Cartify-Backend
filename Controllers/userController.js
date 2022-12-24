@@ -9,8 +9,8 @@ const nodemailer=require('nodemailer')
 let mailTransporter=nodemailer.createTransport({
   service:"gmail",
   auth:{
-    user:"try.user99@gmail.com",
-    pass:"juubuhmyejlursur"
+    user:EMAIL_USER,
+    pass:EMAIL_PASS
   }
 })
  const getAllusers=async(req,res)=>{
@@ -68,7 +68,7 @@ const login_user= async(req,res)=>{
         user.tokens=user.tokens.concat({token});
         await user.save();
         let details={
-          from:"try.user99@gmail.com",
+          from:process.env.EMAIL_FROM,
           to:user.email,
           subject:"Logged In!!! ElexCart",
           text:"confirmation email that u have logged in ElexCart from Devansh :)"
