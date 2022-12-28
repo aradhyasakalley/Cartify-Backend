@@ -24,14 +24,14 @@ router.post('/logoutAll',auth.verifytoken,userController.logout_user_all)
 router.post('/uploadProfilePic',auth.verifytoken,upload.single('profilePic'),userController.upload_profilePic)
 router.put('/removeProfilePic/:id',auth.verifytoken,userController.remove_profilePic);
 //delete one
-router.delete('/:id', auth.verifytoken, authRole('admin'), userController.findUser, userController.remove_User);
+router.delete('/:id', auth.verifytoken, authRole('admin','seller'),  userController.remove_User);
 //update one
 router.patch('/:id', auth.verifytoken, userController.findUser, userController.modify_User);
 
 router.post('/addToCart',auth.verifytoken,cartController.addProdtoCart)
 
 router.post('/removeProd',auth.verifytoken,cartController.removeProd)
-router.get('/getMyprod',auth.verifytoken,authRole('seller'),userController.getMyprod)
+router.get('/getMyprod',auth.verifytoken,authRole('admin','seller' ),userController.getMyprod)
 
 router.post('/directOrder',auth.verifytoken,orderController.directOrder)
 router.post('/cartOrder',auth.verifytoken,orderController.cartOrder)

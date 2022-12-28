@@ -5,19 +5,12 @@ const app = express();
 const dotenv=require('dotenv').config();
 const userRoute = require('./routes/userRoute');
 const productRoute  = require('./routes/productRoute');
-//const dB_serverconnect= require('./dBconnect');
-mongoose.connect(process.env.dBURL , {useNewUrlParser : true , useUnifiedTopology:true})
-.then(()=>app.listen(3000, async()=>{
-    try {
-        console.log('Connected to Database');
-        console.log('Connected to Port 3000');
-        } 
-    catch (error) {
-        console.log('Error Occured' ,error);
-        }
-})
-)
-.catch((err)=>console.log(err));
+
+
+// mongoose.connect(process.env.dBURL , {useNewUrlParser : true , useUnifiedTopology:true})
+// .then(()=>console.log('connected to database'))
+// .catch((err)=>console.log(err));
+
 const fileUpload=require('express-fileupload')
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -33,7 +26,7 @@ app.use(express.static('upload'))
 app.use((req,res)=>{
     res.status(404).send("<p><h4>Oops!404 Error </h4></p>");
 })
-
+module.exports= app;
     
 
     

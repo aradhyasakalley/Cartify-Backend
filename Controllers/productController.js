@@ -30,7 +30,7 @@ const add_product=async(req,res)=>{
       }
      })
      req.user.save()
-     res.status(201).json(savedProduct);
+     res.status(201).json({message:'savedProduct'});
     } catch (error) {
      res.status(400).json({message:error.message});
     }
@@ -58,22 +58,13 @@ const add_product=async(req,res)=>{
     }
   }
 
-  const modify_product=async (req, res) => {
-  
-    if(req.body.name!=null)
-    {res.reqProduct.name = req.body.name}
-    if(req.body.Description!=null)
-    {res.reqProduct.Description = req.body.Description}
-    if(req.body.isAvailable!=null)
-    {res.reqProduct.isAvailable = req.body.isAvailable}
-    if(req.body.Quantity!=null)
-    {res.reqProduct.Quantity=req.body.isAvailable}
+  const modify_product=async (req, res) =>{
     try {
-    const updatedproduct = await res.reqProduct.save();
-    res.status(200).json(updatedproduct);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+        let data=await Product.findByIdAndUpdate(req.params.id,req.body,{new:true})
+        res.status(200).json(data)
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
 }
 
 //middleware function to get product object from id

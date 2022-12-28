@@ -4,6 +4,7 @@ const authRole = (...permittedRole)=>{
         role=req.user.role;
         if(validUser && permittedRole.includes(role))
         {
+            console.log('allowed to pass')
             next();
         }
         else

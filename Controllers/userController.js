@@ -4,13 +4,14 @@ const bcrypt= require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { token } = require('morgan');
 const upload=require('../utils/multer');
-const cloudinary=require('../utils/cloudinary')
-const nodemailer=require('nodemailer')
+const cloudinary=require('../utils/cloudinary');
+const nodemailer=require('nodemailer');
+const env = require('dotenv').config();
 let mailTransporter=nodemailer.createTransport({
   service:"gmail",
   auth:{
-    user:EMAIL_USER,
-    pass:EMAIL_PASS
+    user:process.env.EMAIL_USER,
+    pass:process.env.EMAIL_PASS
   }
 })
  const getAllusers=async(req,res)=>{
@@ -29,25 +30,26 @@ let mailTransporter=nodemailer.createTransport({
     const newUser = new User(req.body);
     try {
     const savedUser = await newUser.save();
-    let details={
-      from:"try.user99@gmail.com",
-      to:newUser.email,
-      subject:"SIGNED UP!!! ElexCart",
-      text:"confirmation email that u have created account in ElexCart from Devansh:)"
-    }
-    mailTransporter.sendMail(details,(err)=>{
-      if(err)
-      console.log(err.message)
-      else
-      console.log('email sent')
-    })
-    res.status(201).json(savedUser);
+    // let details={
+    //   from:process.env.EMAIL_FROM,
+    //   to:newUser.email,
+    //   subject:"SIGNED UP!!! ElexCart",
+    //   text:"confirmation email that u have created account in ElexCart from Devansh:)"
+    // }
+    // mailTransporter.sendMail(details,(err)=>{
+    //   if(err)
+    //   console.log(err.message)
+    //   else
+    //   console.log('email sent')
+    // })
+    return res.status(201).json(savedUser);
     } 
+
     catch (error) {
-    res.status(400).json({message:error.message});
+    return res.status(400).json({message:error.message});
     }
 
-  }
+  };
 
 const login_user= async(req,res)=>{
   const {email,password} = req.body;
@@ -67,18 +69,18 @@ const login_user= async(req,res)=>{
         })
         user.tokens=user.tokens.concat({token});
         await user.save();
-        let details={
-          from:process.env.EMAIL_FROM,
-          to:user.email,
-          subject:"Logged In!!! ElexCart",
-          text:"confirmation email that u have logged in ElexCart from Devansh :)"
-        }
-        mailTransporter.sendMail(details,(err)=>{
-          if(err)
-          console.log(err.message)
-          else
-          console.log('email sent')
-        })
+        // let details={
+        //   from:process.env.EMAIL_FROM,
+        //   to:user.email,
+        //   subject:"Logged In!!! ElexCart",
+        //   text:"confirmation email that u have logged in ElexCart from Devansh :)"
+        // }
+        // mailTransporter.sendMail(details,(err)=>{
+        //   if(err)
+        //   console.log(err.message)
+        //   else
+        //   console.log('email sent')
+        // })
         return res.header('Authorization' ,token).status(200).send({
           user:user,
           message:"login successful",
@@ -121,10 +123,12 @@ const logout_user_all=async(req,res)=>{
 
  const remove_User=async(req,res)=>{
     try {
-        await res.reqUser.remove();
+        console.log(req.params.id);
+        const data = await User.findByIdAndDelete(req.params.id);
+        // await res.reqUser.remove();
         res.status(200).json({ message: 'Deleted User' });
       } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(600).json({ message: err.message });
       }
 
  }
@@ -163,7 +167,7 @@ const logout_user_all=async(req,res)=>{
         return res.status(404).json({ message: 'Cannot find User' });
       }
     } catch (err) {
-      return res.status(500).json({ message: err.message });
+      return res.status(600).json({ message: err.message });
     }
   
     res.reqUser = reqUser;
@@ -199,6 +203,7 @@ const logout_user_all=async(req,res)=>{
     try {
       console.log(req.user.prodId)
       const prod=await Product.find({_id:(req.user.prodId)})
+      console.log('your prod is' , prod);
       res.status(200).json(prod)
     } catch (error) {
       return res.status(500).json({ message: error.message });

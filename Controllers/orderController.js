@@ -44,12 +44,12 @@ const directOrder=async(req,res)=>{
             
                 
           }
-          mailTransporter.sendMail(details,(err)=>{
-            if(err)
-            console.log('not sent' ,err.message)
-            else
-            console.log('email sent')
-          })
+        //   mailTransporter.sendMail(details,(err)=>{
+        //     if(err)
+        //      console.log('not sent' ,err.message)
+        //     else
+        //     // console.log('email sent')
+        //   })
         res.status(200).json({order})
     } catch (error) {
         res.status(400).json({message:error.message})
