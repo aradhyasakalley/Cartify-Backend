@@ -91,7 +91,7 @@ const userSchema = new Schema({
 )
 
 userSchema.post('save' ,function(doc,next){
-    // console.log('New user was created' ,doc)
+    console.log('New user was created' ,doc)
     next();
 });
 

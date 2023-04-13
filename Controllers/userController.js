@@ -26,7 +26,8 @@ let mailTransporter=nodemailer.createTransport({
  }
 
  const add_User=async(req,res)=>{
-    const {username , email, address,new_user,Number,role,rating}= req.body;
+    const {username , email, address,new_user,Number,role}= req.body;
+    console.log(email);
     const newUser = new User(req.body);
     try {
     const savedUser = await newUser.save();
@@ -42,6 +43,7 @@ let mailTransporter=nodemailer.createTransport({
     //   else
     //   console.log('email sent')
     // })
+    console.log(savedUser);
     return res.status(201).json(savedUser);
     } 
 
