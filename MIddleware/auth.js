@@ -4,7 +4,7 @@ const User = require('../models/user');
 require('dotenv').config();
 const verifytoken = async(req,res,next)=>{
     try{
-    const bearerHeader = req.header("authorization");
+    const bearerHeader = req.headers.authorization;
     console.log(bearerHeader);
     if(bearerHeader)
     {
