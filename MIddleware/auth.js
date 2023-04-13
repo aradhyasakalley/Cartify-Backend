@@ -1,10 +1,10 @@
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const dotenv=require('dotenv').config();
+require('dotenv').config();
 const verifytoken = async(req,res,next)=>{
     try{
-    const bearerHeader = req.header('authorization');
+    const bearerHeader = req.header("authorization");
     console.log(bearerHeader);
     if(bearerHeader)
     {
